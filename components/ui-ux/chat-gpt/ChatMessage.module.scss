@@ -1,0 +1,47 @@
+.messageContainer {
+  position: relative;
+  padding: 1rem;
+  border: 1rem dotted red;
+
+  p {
+    padding: 0.75rem !important;
+    font-size: 1rem;
+  }
+
+  pre {
+    background-color: #282c34; // Dark background
+    color: #e3e3e3; // Light text color for contrast
+    padding: 1rem;
+    overflow-x: auto;
+    border-radius: 8px;
+    margin: 8px 0;
+    max-width: 100%; // Ensures the block doesn't exceed its container
+    overflow-x: auto; // Allows horizontal scrolling for overflow content
+    word-wrap: break-word; // Breaks long words to prevent overflow
+
+    code {
+      font-family: "Courier New", Courier, monospace; // Monospaced font for code
+      font-size: 1.25rem;
+      font-weight: bold;
+    }
+  }
+
+  .copyButton {
+    position: absolute;
+    top: 122px; // Adjust as needed
+    right: 25px; // Adjust as needed
+    padding: 0.5rem 0.5rem;
+    background-color: gray;
+  }
+
+  .codeBlock {
+    max-width: 100%; // Ensures the block doesn't exceed its container
+    overflow-x: auto; // Allows horizontal scrolling for overflow content
+    word-wrap: break-word; // Breaks long words to prevent overflow
+
+    pre {
+      white-space: pre-wrap; // Wraps the content within the block
+      // ... other styles
+    }
+  }
+}
