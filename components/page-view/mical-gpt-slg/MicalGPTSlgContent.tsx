@@ -4,7 +4,6 @@ import { Page } from "../../globals";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import UserInputBottom from "@/components/ui-ux/chat-common/UserInputBottom";
 import TranslateDisplayBlock from "@/components/ui-ux/translation-assistant/TranslateDisplayBlock";
-import { useTranslateLangs } from "@/contexts/TranslateContext";
 import useChatStreaming from "@/hooks/useChatStreaming";
 import SidebarSLG from "@/components/ui-ux/mical-gpts/SidebarSLG";
 import { useTrainAI } from "@/contexts/TrainAIContext";
@@ -39,8 +38,11 @@ const MicalGPTSlgContent = () => {
               <div className="flex items-center h-14">
                 <ArrowLeftIcon className="mr-2 h-6 w-6 text-gray-600" />
                 <h1 className="text-xl font-bold">
-                  GPT on SLG | Currently Trained on:
-                  <small>{url}</small>
+                  GPT on SLG |{" "}
+                  <button className="btn mb-2">
+                    Last trained on:
+                    <div className="badge">{url && <p>{url}</p>}</div>
+                  </button>
                 </h1>
               </div>
 

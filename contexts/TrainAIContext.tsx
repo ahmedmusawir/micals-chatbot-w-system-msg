@@ -1,4 +1,10 @@
-import { createContext, ReactNode, useContext, useState } from "react";
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 
 interface TrainAIContextProps {
   url: string;
@@ -21,6 +27,13 @@ export const TrainAIProvider = ({ children }: TrainAIProviderProps) => {
   const [url, setUrl] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [serverLogs, setServerLogs] = useState<string[]>([]);
+
+  useEffect(() => {
+    const savedUrl = localStorage.getItem("lastTrainedURL");
+    if (savedUrl) {
+      setUrl(savedUrl);
+    }
+  }, []); // The empty array ensures this runs only once when the component mounts
 
   return (
     <TrainAIContext.Provider

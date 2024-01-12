@@ -18,8 +18,10 @@ const TrainAIUrlContent = () => {
       const response = await axios.post("/api/train-ai-w-url-faiss-store", {
         url,
       });
+      // Store the URL in LocalStorage
+      localStorage.setItem("lastTrainedURL", url);
       console.log("Server Response:", response);
-      // Assuming the server sends back logs in the response
+      // The server sends back logs in the response
       setServerLogs(response.data.logs);
     } catch (error) {
       console.error("Error training AI:", error);
@@ -35,6 +37,11 @@ const TrainAIUrlContent = () => {
       </Head>
       <Page className={""} FULL={false}>
         <div className="flex flex-col items-center justify-center">
+          <button className="btn mb-2">
+            Last trained on:
+            <div className="badge">{url && <p>{url}</p>}</div>
+          </button>
+
           <input
             type="text"
             value={url}
