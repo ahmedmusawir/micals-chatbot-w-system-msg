@@ -2,15 +2,16 @@ import { BarsArrowUpIcon, UsersIcon } from "@heroicons/react/20/solid";
 import { FormEvent, useState } from "react";
 
 interface Props {
-  onSubmit: (userInput: string) => void;
+  onSubmit: (userInput: string, systemInput: string) => void;
 }
 
 const UserInputBottom = ({ onSubmit }: Props) => {
   const [userInput, setUserInput] = useState("");
+  const systemInput = "";
 
   const handleChatSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    onSubmit(userInput); // Call the passed onSubmit function with the user input
+    onSubmit(userInput, systemInput); // Call the passed onSubmit function with the user input
     setUserInput(""); // Clear the input field after submission
   };
 

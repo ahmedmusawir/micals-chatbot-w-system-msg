@@ -1,20 +1,14 @@
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import { OpenAIEmbeddings } from "langchain/embeddings/openai";
 import { FaissStore } from "langchain/vectorstores/faiss";
+import { RetrievalQAChain, loadQAStuffChain } from "langchain/chains";
 import { PuppeteerWebBaseLoader } from "langchain/document_loaders/web/puppeteer";
 import * as cheerio from "cheerio";
 import * as puppeteer from "puppeteer";
 import { Document } from "langchain/document";
 
 export async function processURLToFaissVectorStore(url: string) {
-  const logs: string[] = []; // Array to store log messages
-
-  const customLog = (message: string) => {
-    console.log(message); // Log to console
-    logs.push(message); // Store in the logs array
-  };
-
-  customLog("Making the call to:" + url);
+  console.log("Making the call to:", url);
 
   const loader = new PuppeteerWebBaseLoader(url, {
     launchOptions: {
@@ -38,12 +32,12 @@ export async function processURLToFaissVectorStore(url: string) {
     },
   });
 
-  customLog("Loading URL to Docs...");
+  console.log("Loading URL to Docs");
 
   const urlDocs = await loader.load();
   const pageContent = urlDocs[0].pageContent; // Access the extracted text content
 
-  customLog("Loading the Page Content from Puppeteer...");
+  console.log(pageContent);
 
   // Load the HTML content into cheerio
   const $ = cheerio.load(pageContent);
@@ -61,25 +55,23 @@ export async function processURLToFaissVectorStore(url: string) {
   // Extract the text from the HTML content
   const textContent = cleaned$("body").text();
 
-  console.log("Cleaned up the Text Content with Cheerio...", textContent);
+  // console.log(textContent);
 
   const docs = textContent.replace(/[^\x20-\x7E]+/g, ""); // Remove non-ASCII characters
 
   //   console.log(docs);
 
-  customLog("Splitting up the Documents in smaller chunks...");
-
   // Create Document instances
   const documents = [new Document({ pageContent: docs })];
 
   const splitter = new RecursiveCharacterTextSplitter({
-    chunkSize: 1000,
+    chunkSize: 200,
     chunkOverlap: 50,
   });
 
   const splitDocuments = await splitter.splitDocuments(documents);
 
-  customLog("Creating Vector Embeddings in smaller batches...");
+  //   console.log(splitDocuments);
 
   // Initialize OpenAI embeddings
   const embeddings = new OpenAIEmbeddings();
@@ -94,14 +86,10 @@ export async function processURLToFaissVectorStore(url: string) {
     allDocs.push(...batch);
   }
 
-  customLog("Creating the Faiss Vector Store...");
-
   // Load the docs into the vector store
   const vectorStore = await FaissStore.fromDocuments(allDocs, embeddings);
 
   await vectorStore.save("./store/faiss-vector-store/");
 
-  customLog("Faiss Vector store created successfully!");
-
-  return logs;
+  console.log("Faiss Vector store created successfully!");
 }

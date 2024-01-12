@@ -3,22 +3,20 @@ import React from "react";
 import { Page } from "../../globals";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import UserInputBottom from "@/components/ui-ux/chat-common/UserInputBottom";
-import useChatTranslate from "@/hooks/useChatTranslate";
-import TranslateSidebar from "@/components/ui-ux/translation-assistant/TranslateSidebar";
 import TranslateDisplayBlock from "@/components/ui-ux/translation-assistant/TranslateDisplayBlock";
 import { useTranslateLangs } from "@/contexts/TranslateContext";
 import useChatStreaming from "@/hooks/useChatStreaming";
 import SidebarSLG from "@/components/ui-ux/mical-gpts/SidebarSLG";
+import { useTrainAI } from "@/contexts/TrainAIContext";
 
 const MicalGPTSlgContent = () => {
-  // Context Hook
-  const { inputLang, outputLang } = useTranslateLangs();
+  const { url } = useTrainAI();
   // Output Streaming Hook
   const { chatMessages, isLoading, submitMessage, setChatMessages } =
     useChatStreaming("/api/mical-slg-chat");
   // Function to handle the form submission
-  const handleChatSubmit = async (userInput: string) => {
-    submitMessage(userInput);
+  const handleChatSubmit = async (userInput: string, systemInput: string) => {
+    submitMessage(userInput, systemInput);
   };
 
   return (
@@ -30,7 +28,7 @@ const MicalGPTSlgContent = () => {
       <Page className={""} FULL={true} customYMargin="my-0">
         <div className="flex">
           {/* Left Sidebar Column */}
-          <SidebarSLG />
+          <SidebarSLG setChatMessages={setChatMessages} />
           {/* Left Sidebar Column ENDS*/}
 
           {/* Right Content Column */}
@@ -40,7 +38,10 @@ const MicalGPTSlgContent = () => {
               {/* Top Chat Block */}
               <div className="flex items-center h-14">
                 <ArrowLeftIcon className="mr-2 h-6 w-6 text-gray-600" />
-                <h1 className="text-xl font-bold">GPT on SLG 1</h1>
+                <h1 className="text-xl font-bold">
+                  GPT on SLG | Currently Trained on:
+                  <small>{url}</small>
+                </h1>
               </div>
 
               {/* Main Chat Display Block */}

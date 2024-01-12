@@ -1,22 +1,11 @@
 import { useTranslateLangs } from "@/contexts/TranslateContext";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useState } from "react";
 
 const SystemPromptInput = () => {
   const { systemInput, setSystemInput } = useTranslateLangs();
 
-  const localStorageKey = "systemPromptInput"; // Key for localStorage
-
-  useEffect(() => {
-    // Check for saved input in localStorage when component mounts
-    const savedInput = localStorage.getItem(localStorageKey);
-    if (savedInput) {
-      setSystemInput(savedInput);
-    }
-  }, [setSystemInput]);
-
   const handleChatSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    localStorage.setItem(localStorageKey, systemInput); // Save to localStorage
   };
 
   const resetTextArea = () => {
@@ -32,6 +21,7 @@ const SystemPromptInput = () => {
           className="mb-5 h-96 p-5"
           placeholder="Type your message..."
           aria-label="Type your message"
+          required
         />
         <section className="flex mr-3">
           <button type="submit" className="btn w-[50%] mx-1" aria-label="Send">

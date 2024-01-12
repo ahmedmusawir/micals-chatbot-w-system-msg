@@ -118,10 +118,10 @@ const Navbar = () => {
                         {/* <NavLink href="/moose-gpt-1">Chat 1</NavLink> */}
                         <NavLink href="/moose-gpt-3">Chat</NavLink>
                         <NavLink href="/mical-gpt-slg">SLG Chat</NavLink>
+                        <NavLink href="/train-ai-url">Train AI</NavLink>
                         <NavLink href="/moose-translate-gpt">
                           Language Assistant
                         </NavLink>
-                        {/* <NavLink href="/shop">Shop</NavLink> */}
                         {/* <NavLink href="/template">Template</NavLink> */}
                         {/* <NavLink href="/demo">Demo</NavLink> */}
                       </nav>

@@ -1,21 +1,30 @@
-import { Language, Message } from "@/global-interfaces";
+import { Message } from "@/global-interfaces";
+import { useRouter } from "next/router";
 import React from "react";
 
 interface Props {
   setChatMessages: React.Dispatch<React.SetStateAction<Message[]>>;
 }
 
-// const SidebarSLG = ({ setChatMessages }: Props) => {
-const SidebarSLG = () => {
-  // Function to handle clear messages
+const SidebarSLG = ({ setChatMessages }: Props) => {
+  const router = useRouter();
+
   const handleClearMessage = () => {
-    // setChatMessages([]);
+    setChatMessages([]);
   };
+
+  const handleTrainAI = () => {
+    router.push("/train-ai-url");
+  };
+
   return (
     <>
       <div className="hidden sm:block w-64 bg-gray-300 p-4">
-        <button className="btn" onClick={handleClearMessage}>
+        <button className="btn w-full mt-3" onClick={handleClearMessage}>
           Clear Messages
+        </button>
+        <button className="btn w-full mt-3" onClick={handleTrainAI}>
+          Train AI
         </button>
       </div>
     </>

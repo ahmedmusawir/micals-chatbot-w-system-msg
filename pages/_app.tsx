@@ -11,6 +11,7 @@ import { ToastContainer } from "react-toastify";
 import { Theme } from "@radix-ui/themes";
 import "@radix-ui/themes/styles.css";
 import { TranslateProvider } from "@/contexts/TranslateContext";
+import { TrainAIProvider } from "@/contexts/TrainAIContext";
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
@@ -20,8 +21,10 @@ export default function App({ Component, pageProps }: AppProps) {
           <ProductProvider>
             <CartProvider>
               <TranslateProvider>
-                <Component {...pageProps} />
-                <ToastContainer />
+                <TrainAIProvider>
+                  <Component {...pageProps} />
+                  <ToastContainer />
+                </TrainAIProvider>
               </TranslateProvider>
             </CartProvider>
           </ProductProvider>
