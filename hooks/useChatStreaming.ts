@@ -1,3 +1,4 @@
+import { useTranslateLangs } from "@/contexts/TranslateContext";
 import { Message } from "@/global-interfaces";
 import { useState } from "react";
 
@@ -5,7 +6,7 @@ const useChatStreaming = (apiEndpoint: string) => {
   const [chatMessages, setChatMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const submitMessage = async (userInput: string) => {
+  const submitMessage = async (userInput: string, systemInput: string) => {
     setIsLoading(true);
 
     // Add user's message to the chat
@@ -14,7 +15,7 @@ const useChatStreaming = (apiEndpoint: string) => {
     // API call to get the AI response
     const response = await fetch(apiEndpoint, {
       method: "POST",
-      body: JSON.stringify({ prompt: userInput }),
+      body: JSON.stringify({ prompt: userInput, systemPrompt: systemInput }),
       headers: {
         "Content-Type": "application/json",
       },

@@ -1,33 +1,41 @@
+import openAiService from "@/services/openAiService";
+import {
+  ConversationalRetrievalQAChain,
+  RetrievalQAChain,
+  loadQAStuffChain,
+} from "langchain/chains";
+import { OpenAIEmbeddings } from "langchain/embeddings/openai";
+import { FaissStore } from "langchain/vectorstores/faiss";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { ChatOpenAI } from "langchain/chat_models/openai";
-import { HumanMessage, SystemMessage } from "langchain/schema";
+import path from "path";
+
+type Data = {
+  message: string;
+};
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse<Data>
 ) {
   const { prompt } = req.body;
   // Create a new instance of the OpenAI model
-  const model = new ChatOpenAI({
-    temperature: 0.5,
-    modelName: "gpt-3.5-turbo-16k",
-    streaming: true,
-    callbacks: [
-      {
-        handleLLMNewToken(token) {
-          res.write(token);
-        },
-      },
-    ],
+  const model = openAiService(res, 0.5, "gpt-4-1106-preview");
+
+  const embeddings = new OpenAIEmbeddings();
+  const vectorStore = await FaissStore.load(
+    "/store/faiss-vector-store",
+    embeddings
+  );
+
+  const chain = new RetrievalQAChain({
+    combineDocumentsChain: loadQAStuffChain(model),
+    retriever: vectorStore.asRetriever(),
+    returnSourceDocuments: true,
   });
 
-  await model.call([
-    new SystemMessage(
-      "Your name is Rico. You are a friendly talkative AI and provide lots of specific details from it's context. If you don't know the answer to a question, it truthfully says it doesn't know. Also, always answer in Markdown format"
-    ),
-
-    new HumanMessage(prompt),
-  ]);
+  await chain.invoke({
+    query: prompt,
+  });
 
   res.end();
 }

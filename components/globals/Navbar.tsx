@@ -115,9 +115,9 @@ const Navbar = () => {
                         Cyberize AI
                       </Link>
                       <nav className="hidden sm:ml-6 sm:flex flex-grow justify-center items-center">
-                        <NavLink href="/moose-gpt-1">Chat 1</NavLink>
-                        <NavLink href="/moose-gpt-2">Chat 2</NavLink>
-                        <NavLink href="/moose-gpt-3">Chat 3</NavLink>
+                        {/* <NavLink href="/moose-gpt-1">Chat 1</NavLink> */}
+                        <NavLink href="/moose-gpt-3">Chat</NavLink>
+                        <NavLink href="/mical-gpt-slg">SLG Chat</NavLink>
                         <NavLink href="/moose-translate-gpt">
                           Language Assistant
                         </NavLink>

@@ -6,7 +6,9 @@ interface TranslateContextProps {
   outputLangs: Language[];
   outputLang: string;
   inputLang: string;
+  systemInput: string;
   setOutputLang: React.Dispatch<React.SetStateAction<string>>;
+  setSystemInput: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const TranslateContext = createContext<TranslateContextProps | undefined>(
@@ -19,10 +21,18 @@ interface TranslateProviderProps {
 
 export const TranslateProvider = ({ children }: TranslateProviderProps) => {
   const [outputLang, setOutputLang] = useState<string>(outputLangs[0].title);
+  const [systemInput, setSystemInput] = useState("");
 
   return (
     <TranslateContext.Provider
-      value={{ outputLangs, outputLang, inputLang, setOutputLang }}
+      value={{
+        outputLangs,
+        outputLang,
+        inputLang,
+        systemInput,
+        setOutputLang,
+        setSystemInput,
+      }}
     >
       {children}
     </TranslateContext.Provider>

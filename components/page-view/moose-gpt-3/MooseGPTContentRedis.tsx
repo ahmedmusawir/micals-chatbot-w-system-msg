@@ -6,13 +6,16 @@ import Spinner from "@/components/ui-ux/common/Spinner";
 import useChatStreaming from "@/hooks/useChatStreaming";
 import ChatMessage from "@/components/ui-ux/moose-gpt-3/ChatMessage";
 import UserInputBottom from "@/components/ui-ux/moose-gpt-3/UserInputBottom";
+import SystemPromptInput from "@/components/ui-ux/moose-gpt-3/SystemPromptInput";
+import { useTranslateLangs } from "@/contexts/TranslateContext";
 
 const MooseGPTContentRedis = () => {
+  const { systemInput } = useTranslateLangs();
   const { chatMessages, isLoading, submitMessage, setChatMessages } =
     useChatStreaming("/api/moose-chat-memory");
   // Function to handle the form submission
   const handleChatSubmit = async (userInput: string) => {
-    submitMessage(userInput);
+    submitMessage(userInput, systemInput);
   };
 
   // Function to handle clear messages
@@ -29,10 +32,12 @@ const MooseGPTContentRedis = () => {
       <Page className={""} FULL={true} customYMargin="my-0">
         <div className="flex">
           {/* Left Sidebar Column */}
-          <div className="hidden sm:block w-64 bg-gray-300 p-4">
+          {/* <div className="hidden sm:block w-96 bg-gray-300 p-4"> */}
+          <div className="hidden sm:block w-1/4 bg-gray-300 p-4">
             <button className="btn" onClick={handleClearMessage}>
               Clear Messages
             </button>
+            <SystemPromptInput />
           </div>
           {/* Left Sidebar Column ENDS*/}
 
@@ -43,7 +48,7 @@ const MooseGPTContentRedis = () => {
               {/* Top Chat Block */}
               <div className="flex items-center h-14">
                 <ArrowLeftIcon className="mr-2 h-6 w-6 text-gray-600" />
-                <h1 className="text-xl font-bold">MooseGPT v3</h1>
+                <h1 className="text-xl font-bold">Mical's AI Chatroom</h1>
               </div>
 
               {/* Main Chat Display Block */}
