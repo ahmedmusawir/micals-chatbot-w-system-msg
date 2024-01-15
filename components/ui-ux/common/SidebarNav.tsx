@@ -1,7 +1,6 @@
 import { QrCodeIcon } from "@heroicons/react/24/outline";
 import { resetAll } from "@/features/posts/postsFilterSlice";
 import { useDispatch } from "react-redux";
-import SidebarForm from "@/components/forms/SidebarForm";
 
 const navigation = [
   { name: "Reset Results...", href: "#", icon: QrCodeIcon, current: true },
@@ -42,9 +41,7 @@ const SidebarNav = () => {
             ))}
           </ul>
         </li>
-        <li>
-          <SidebarForm />
-        </li>
+        <li></li>
       </ul>
     </nav>
   );

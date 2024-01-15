@@ -21,7 +21,7 @@ const MicalGPTSlgContent = () => {
   return (
     <>
       <Head>
-        <title>Moose GPTs</title>
+        <title>Mical GPTs</title>
         <meta name="description" content="This is the demo page" />
       </Head>
       <Page className={""} FULL={true} customYMargin="my-0">

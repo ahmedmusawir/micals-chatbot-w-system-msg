@@ -1,8 +1,7 @@
 import HttpService, { ApiResponse } from "./httpService";
-import { PostData } from "@/data-layer/post-entities";
 
-export type PostApiResponse = ApiResponse<PostData>;
+export type PostApiResponse = ApiResponse<any>;
 
-const postService = new HttpService<PostData>("/posts");
+const postService = new HttpService<any>("/posts");
 
 export default postService;

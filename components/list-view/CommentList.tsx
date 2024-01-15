@@ -1,4 +1,3 @@
-import { Comments } from "@/data-layer/post-entities";
 import { useDeleteCommentMutation } from "@/features/comments/apiComments";
 import { ApiError, RootState } from "@/global-interfaces";
 import { formatDate } from "@/utils";
@@ -8,7 +7,7 @@ import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
 interface CommentListProps {
-  comments: Comments[] | undefined;
+  comments: any[] | undefined;
 }
 
 const CommentList = ({ comments }: CommentListProps) => {

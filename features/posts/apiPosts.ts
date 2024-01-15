@@ -1,4 +1,3 @@
-import { PostData } from "@/data-layer/post-entities";
 import { FiltersState } from "@/global-interfaces";
 import { PostApiResponse } from "@/services/postService";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";

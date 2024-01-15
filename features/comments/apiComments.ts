@@ -1,4 +1,3 @@
-import { PostData } from "@/data-layer/post-entities";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const apiComments = createApi({
@@ -8,7 +7,7 @@ export const apiComments = createApi({
     baseUrl: "/api",
   }),
   endpoints: (builder) => ({
-    getPostById: builder.query<PostData, number>({
+    getPostById: builder.query<any, number>({
       query: (postId) => `post-by-id?id=${postId}`,
       providesTags: [{ type: "Comment", id: "LIST" }],
     }),

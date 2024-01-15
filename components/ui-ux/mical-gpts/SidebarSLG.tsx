@@ -23,6 +23,7 @@ const SidebarSLG = ({ setChatMessages }: Props) => {
         <button className="btn w-full mt-3" onClick={handleClearMessage}>
           Clear Messages
         </button>
+        <hr />
         <button className="btn w-full mt-3" onClick={handleTrainAI}>
           Train AI
         </button>

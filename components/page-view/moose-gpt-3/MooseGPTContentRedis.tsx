@@ -26,7 +26,7 @@ const MooseGPTContentRedis = () => {
   return (
     <>
       <Head>
-        <title>Moose GPTs</title>
+        <title>Mical GPTs</title>
         <meta name="description" content="This is the demo page" />
       </Head>
       <Page className={""} FULL={true} customYMargin="my-0">
@@ -34,9 +34,14 @@ const MooseGPTContentRedis = () => {
           {/* Left Sidebar Column */}
           {/* <div className="hidden sm:block w-96 bg-gray-300 p-4"> */}
           <div className="hidden sm:block w-1/4 bg-gray-300 p-4">
-            <button className="btn" onClick={handleClearMessage}>
+            <button className="btn mb-3" onClick={handleClearMessage}>
               Clear Messages
             </button>
+            <hr />
+            <h4 className="mt-5">
+              Your System Message: <br />
+              <small>This is where you change the bot's personality ...</small>
+            </h4>
             <SystemPromptInput />
           </div>
           {/* Left Sidebar Column ENDS*/}
