@@ -15,6 +15,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  // const { prompt, systemPrompt } = req.body;
   const { prompt, systemPrompt: userSystemPrompt } = req.body;
 
   console.log("System Prompt from user:", userSystemPrompt);
@@ -38,30 +39,32 @@ export default async function handler(
     ["user", "{input}"],
   ]);
 
-  const chatHistoryStore = new UpstashRedisChatMessageHistory({
-    sessionId: "mical-123",
-    config: {
-      url: "https://flexible-reindeer-48765.upstash.io",
-      token: process.env.UPSTASH_API_KEY!,
-    },
-  });
-
   const memory = new BufferMemory({
-    chatHistory: chatHistoryStore,
-    returnMessages: true, // Ensure memory returns a list of messages
-    memoryKey: "chatHistory",
+    chatHistory: new UpstashRedisChatMessageHistory({
+      sessionId: "mical-123",
+      config: {
+        url: "https://flexible-reindeer-48765.upstash.io",
+        token: process.env.UPSTASH_API_KEY!,
+      },
+    }),
   });
 
-  // Setup Conversation Chain with Memory
   const chain = new ConversationChain({
     llm: model,
     memory: memory,
-    prompt: chatPrompt,
+    prompt: chatPrompt, // Include the chat prompt in the chain
   });
 
-  // Call the chain with the input and current chat history
-  await chain.call({
+  const chatHistory = await memory.loadMemoryVariables({});
+
+  if (!chatHistory || !chatHistory.chatHistory) {
+    // Handle cases where chatHistory is not available
+    chatHistory.chatHistory = []; // Initialize if needed
+  }
+
+  const result = await chain.call({
     input: prompt,
+    chatHistory: chatHistory.chatHistory as BaseMessages[], // Cast as BaseMessages[]
   });
 
   res.end();

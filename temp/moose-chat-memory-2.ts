@@ -3,14 +3,35 @@ import { UpstashRedisChatMessageHistory } from "langchain/stores/message/upstash
 import { ConversationChain } from "langchain/chains";
 import { BufferMemory } from "langchain/memory";
 import openAiService from "@/services/openAiService";
+import { ChatPromptTemplate, MessagesPlaceholder } from "langchain/prompts";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { prompt } = req.body;
+  // const { prompt, systemPrompt } = req.body;
+  const { prompt, systemPrompt: userSystemPrompt } = req.body;
+
+  console.log("System Prompt from user:", userSystemPrompt);
+
+  // Default system prompt
+  const defaultSystemPrompt =
+    "Your name is Rico. You are a helpful and polite assistant who has a sense of humor.";
+
+  // Use the user-provided system prompt if it exists and is not empty, otherwise use the default
+  const systemPrompt = userSystemPrompt?.trim()
+    ? userSystemPrompt
+    : defaultSystemPrompt;
+
   // Create a new instance of the OpenAI model
   const model = openAiService(res, 0.5, "gpt-4-1106-preview");
+
+  // Construct the conversation prompt template
+  const chatPrompt = ChatPromptTemplate.fromMessages([
+    ["system", systemPrompt],
+    // new MessagesPlaceholder("chatHistory"),
+    ["user", "{input}"],
+  ]);
 
   const memory = new BufferMemory({
     chatHistory: new UpstashRedisChatMessageHistory({
@@ -25,11 +46,10 @@ export default async function handler(
   const chain = new ConversationChain({
     llm: model,
     memory: memory,
+    prompt: chatPrompt, // Include the chat prompt in the chain
   });
 
   await chain.call({
-    system:
-      "Your name is Rico. You are a helpful and polite assistant who has a sense of humor.",
     input: prompt,
   });
 

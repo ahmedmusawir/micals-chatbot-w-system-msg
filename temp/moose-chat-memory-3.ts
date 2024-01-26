@@ -5,16 +5,11 @@ import { BufferMemory } from "langchain/memory";
 import openAiService from "@/services/openAiService";
 import { ChatPromptTemplate, MessagesPlaceholder } from "langchain/prompts";
 
-interface BaseMessages {
-  role: "user" | "system";
-  content: string;
-  timestamp?: Date;
-}
-
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  // const { prompt, systemPrompt } = req.body;
   const { prompt, systemPrompt: userSystemPrompt } = req.body;
 
   console.log("System Prompt from user:", userSystemPrompt);
@@ -38,30 +33,28 @@ export default async function handler(
     ["user", "{input}"],
   ]);
 
-  const chatHistoryStore = new UpstashRedisChatMessageHistory({
-    sessionId: "mical-123",
-    config: {
-      url: "https://flexible-reindeer-48765.upstash.io",
-      token: process.env.UPSTASH_API_KEY!,
-    },
-  });
-
   const memory = new BufferMemory({
-    chatHistory: chatHistoryStore,
-    returnMessages: true, // Ensure memory returns a list of messages
-    memoryKey: "chatHistory",
+    chatHistory: new UpstashRedisChatMessageHistory({
+      sessionId: "mical-123",
+      config: {
+        url: "https://flexible-reindeer-48765.upstash.io",
+        token: process.env.UPSTASH_API_KEY!,
+      },
+    }),
   });
 
-  // Setup Conversation Chain with Memory
   const chain = new ConversationChain({
     llm: model,
     memory: memory,
-    prompt: chatPrompt,
+    prompt: chatPrompt, // Include the chat prompt in the chain
   });
 
-  // Call the chain with the input and current chat history
-  await chain.call({
+  const memoryVariables = await memory.loadMemoryVariables({});
+  const chatHistory = memoryVariables.history;
+
+  const result = await chain.call({
     input: prompt,
+    chatHistory: chatHistory,
   });
 
   res.end();
