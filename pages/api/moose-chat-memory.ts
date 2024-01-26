@@ -5,12 +5,6 @@ import { BufferMemory } from "langchain/memory";
 import openAiService from "@/services/openAiService";
 import { ChatPromptTemplate, MessagesPlaceholder } from "langchain/prompts";
 
-interface BaseMessages {
-  role: "user" | "system";
-  content: string;
-  timestamp?: Date;
-}
-
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
